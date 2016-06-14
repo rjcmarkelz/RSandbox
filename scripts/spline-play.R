@@ -25,4 +25,51 @@ detach()
 
 head(size)
 
+x <- c(1:24)
+mu <- 10 + 5 * sin(x * pi / 24) - 2 * cos((x - 6)*4/24)
+mu
+set.seed(1234)
+eee <- rnorm(length(mu))
+eee
+y <- mu + eee
 
+x6 <- (x - 6)
+x6[x6 < 0] <- 0
+x12 <- (x - 12)
+x12[x12 < 0 ] <- 0
+x18 <- (x - 18)
+x18[x18 < 0] <- 0
+
+fit <- lm(y ~ x + x6 + x12 + x18)
+fit
+print(summary(fit))
+
+fitted.mean <- predict(fit)
+plot(x, y)
+lines(x, mu, col = "red")
+lines(x, fitted.mean, col = "blue", lwd = 2)
+lines(x, fitted.mean2, col = "black", lwd = 2)
+fitted.mean
+
+x.squared <- x^2
+x.cubed <- x^3
+
+fit <- lm(y ~ x + x.squared + x.cubed)
+fitted.mean2 <- predict(fit)
+
+x6.cubed <- x6^3
+x12.cubed <- x12^3
+x18.cubed <- x18^3
+
+fit <- lm(y ~ x + x.squared + x.cubed + x6.cubed + x12.cubed + x18.cubed)
+fitted.mean3 <- predict(fit)
+lines(x, fitted.mean3, col = "green", lwd = 2)
+
+library(splines)
+fit <- lm(y ~ ns(x, knots = c(6, 12, 18)))
+fitted.mean4 <- predict(fit)
+lines(x, fitted.mean4, col = "orange", lwd = 2)
+
+?smooth.spline
+#
+# finish splines
